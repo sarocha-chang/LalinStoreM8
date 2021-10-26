@@ -41,9 +41,10 @@ db.sequelize.sync({force: true}).then(async () => {
 
 	vitamin = await db.items.bulkCreate(vitamin, {validate: true});
 	const categoryVitamin = await db.category.create({name: "vitamin"});
-	const subVitamin = await db.subcategory.create({name: "vitamin c"});
-	await categoryVitamin.addSubcategory(subVitamin);
-	await subVitamin.addItems(vitamin);
+	categoryVitamin.addItems(vitamin);
+	// const subVitamin = await db.subcategory.create({name: "vitamin c"});
+	// await categoryVitamin.addSubcategory(subVitamin);
+	// await subVitamin.addItems(vitamin);
 });
 
 // db.sequelize.sync();
