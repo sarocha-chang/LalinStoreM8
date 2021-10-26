@@ -26,25 +26,21 @@ db.sequelize.sync({force: true}).then(async () => {
 	} catch (error) {
 		console.log(error);
 	}
-
-	// hairCare = await db.items.bulkCreate(hairCare, {validate: true});
+	hairCare = await db.items.bulkCreate(hairCare, {validate: true});
 	const categoryHair = await db.category.create({name: "haircare"});
-	// await categoryHair.addItems(hairCare);
+	await categoryHair.addItems(hairCare);
 
-	// bodyCare = await db.items.bulkCreate(bodyCare, {validate: true});
+	bodyCare = await db.items.bulkCreate(bodyCare, {validate: true});
 	const categoryBody = await db.category.create({name: "bodycare"});
-	// await categoryBody.addItems(bodyCare);
+	await categoryBody.addItems(bodyCare);
 
-	// faceCare = await db.items.bulkCreate(faceCare, {validate: true});
+	faceCare = await db.items.bulkCreate(faceCare, {validate: true});
 	const categoryFace = await db.category.create({name: "facecare"});
-	// await categoryFace.addItems(faceCare);
+	await categoryFace.addItems(faceCare);
 
 	vitamin = await db.items.bulkCreate(vitamin, {validate: true});
 	const categoryVitamin = await db.category.create({name: "vitamin"});
 	categoryVitamin.addItems(vitamin);
-	// const subVitamin = await db.subcategory.create({name: "vitamin c"});
-	// await categoryVitamin.addSubcategory(subVitamin);
-	// await subVitamin.addItems(vitamin);
 });
 
 // db.sequelize.sync();
