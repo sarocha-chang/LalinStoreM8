@@ -1,0 +1,26 @@
+[
+	{
+		"firstname": "usertest",
+		"lastname": "testnumberone",
+		"username": "testnumber1",
+		"password": "testnumber1",
+		"email": "testnumber1@gmail.com",
+		"phone": "08202034564"
+	},
+	{
+		"firstname": "usertest",
+		"lastname": "testnumbertwo",
+		"username": "testnumber2",
+		"password": "testnumber2",
+		"email": "testnumber2@gmail.com",
+		"phone": "08202034564"
+	},
+	{
+		"firstname": "usertest",
+		"lastname": "testnumberthree",
+		"username": "testnumber3",
+		"password": "testnumber3",
+		"email": "testnumber3@gmail.com",
+		"phone": "08202034564"
+	}
+]
