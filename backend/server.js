@@ -1,5 +1,5 @@
 require("dotenv").config();
-// require("./middlewares/auth");
+require("./middlewares/auth");
 
 const app = require("./config/express");
 const db = require("./model");

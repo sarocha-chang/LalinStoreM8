@@ -10,6 +10,7 @@ import {fetchItem} from "../../app/Item/actions";
 import DetailTable from "./DetailTable";
 
 function Items({className}) {
+	
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
 
 	const items = useSelector((state) => state.items);
@@ -28,22 +29,22 @@ function Items({className}) {
 	// if (!user) {
 	// 	Swal.fire({
 	// 		icon: "error",
-	// 		title: "กรุณาล็อคอินก่อนทำรายการ",
+	// 		title: "กรุณาล็อคอิน",
 	// 	});
 	// 	return <Redirect to="/home" />;
 	// }
 
-	// function useSearch(event) {
-	// 	setKeyword(event.target.value);
-	// 	axios
-	// 		.get(`/all/search/${keyword}`)
-	// 		.then((res) => {
-	// 			dispatch(fetchItem(res.data.book));
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
+	function useSearch(event) {
+		setKeyword(event.target.value);
+		axios
+			.get(`/all/search/${keyword}`)
+			.then((res) => {
+				dispatch(fetchItem(res.data.item));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 
 	return (
 		<div className={className}>
@@ -52,12 +53,12 @@ function Items({className}) {
 				<input
 					type="text"
 					className="search"
-					placeholder="Search by book's name"
-					// onChange={useSearch}
+					placeholder="Search by item's name"
+					onChange={useSearch}
 					value={keyword}
 				/>
 			</form>
-			<table className="ShowBook">
+			<table className="ShowItem">
 				<thead>
 					<tr>
 						<th>id</th>
@@ -106,12 +107,17 @@ export default styled(Items)`
 	.ShowItem {
 		border-collapse: collapse;
 		border-radius: 15px;
-		width: 100%;
+		width: 85%;
 		table-layout: fixed;
+		border: 1px solid #e5e5e5;
+		margin-left: 8rem;
+		color: #544e3d;
 		thead tr th {
+			padding: 10px;
 			text-align: center;
 			font-size: 20px;
 			font-weight: bold;
+			padding-top: 20px;
 			padding-bottom: 30px;
 			border-bottom: 1px solid #e5e5e5;
 		}
@@ -139,7 +145,7 @@ export default styled(Items)`
 	input.search:focus {
 		outline: none;
 		border-radius: 12px;
-		border: 2px solid #ffc531;
+		border: 2px solid #e47d29;
 		transition: border 0.3s;
 		font-family: "IBM Plex Sans Thai", sans-serif;
 		padding: 5px;

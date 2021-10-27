@@ -7,31 +7,31 @@ import axios from "axios";
 import React from "react";
 import "boxicons";
 
-//import {deleteBook} from "../../app/Item/actions";
+import {deleteItem} from "../../app/Item/actions";
 
 function DetailTable({className, data}) {
 	const [id] = React.useState(data.id);
 	const dispatch = useDispatch();
 
-	// function delete_item() {
-	// 	return Swal.fire({
-	// 		title: "โปรดยืนยัน",
-	// 		text: "ต้องการสินค้านี้ออกจากคลังหรือไม่",
-	// 		icon: "warning",
-	// 		showCancelButton: true,
-	// 		cancelButtonText: "ไม่",
-	// 		confirmButtonColor: "#3085d6",
-	// 		cancelButtonColor: "#d33",
-	// 		confirmButtonText: "ใช่",
-	// 	}).then((result) => {
-	// 		if (result.isConfirmed) {
-	// 			Swal.fire("ลบสำเร็จ", "ลบสินค้าในคลังเรียบร้อยแล้ว", "success");
-	// 			/*axios.delete(`/admin/deleteBook/${id}`).then(() => {
-	// 				dispatch(deleteBook({_id: id}));
-	// 			});*/
-	// 		}
-	// 	});
-	// }
+	function delete_item() {
+		return Swal.fire({
+			title: "โปรดยืนยัน",
+			text: "ต้องการสินค้านี้ออกจากคลังหรือไม่",
+			icon: "warning",
+			showCancelButton: true,
+			cancelButtonText: "ไม่",
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "ใช่",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire("ลบสำเร็จ", "ลบสินค้าในคลังเรียบร้อยแล้ว", "success");
+				axios.delete(`/admin/deleteItem/${id}`).then(() => {
+					dispatch(deleteItem({_id: id}));
+				});
+			}
+		});
+	}
 
 	return (
 		<tr className={className}>
@@ -44,15 +44,15 @@ function DetailTable({className, data}) {
 			<td className="des">
 				<span className="text-overflow">{data.description}</span>
 			</td>
-			<td>{data.type}</td>
+			<td>{data.category_id}</td>
 			<td>{data.price}</td>
 			<td>{data.status}</td>
 			<td>{data.rating}</td>
 			<td>
-				<Link to>
+				<Link to={`/admin/edit-item/${data.id}`}>
 					<box-icon name="edit" />
 				</Link>
-				<box-icon name="trash" type="solid" color="#f04e4e" />
+				<box-icon name="trash" type="solid" color="#f04e4e" onClick={delete_item} />
 			</td>
 		</tr>
 	);

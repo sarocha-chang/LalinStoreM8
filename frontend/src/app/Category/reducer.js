@@ -1,23 +1,23 @@
 import {createReducer} from "@reduxjs/toolkit";
 
-import {fetchItem, editItem, deleteItem, searchItem, addItem} from "./actions";
+import {fetchCategory,editCategory,deleteCategory,searchCategory, addCategory} from "./actions";
 
 export default createReducer([], {
-	[fetchItem]: (state, action) => {
+	[fetchCategory]: (state, action) => {
 		return action.payload;
 	},
-	[addItem]: (state, action) => {
+	[addCategory]: (state, action) => {
 		return action.payload;
 	},
-	[editItem]: (state, action) => {
+	[editCategory]: (state, action) => {
 		const itemIndex = state.findIndex((items) => items.id === action.payload.id);
 		state[itemIndex] = action.payload;
 	},
-	[deleteItem]: (state, action) => {
+	[deleteCategory]: (state, action) => {
 		const itemIndex = state.findIndex((items) => items.id === action.payload.id);
 		state.splice(itemIndex, 1);
 	},
-	[searchItem]: (state, action) => {
+	[searchCategory]: (state, action) => {
 		const id = action.payload;
 		return state.filter((items) => {
 			return items.id === id;
