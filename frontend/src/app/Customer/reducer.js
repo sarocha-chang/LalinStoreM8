@@ -1,19 +1,21 @@
-import { createReducer } from "@reduxjs/toolkit";
+import {createReducer} from "@reduxjs/toolkit";
 
-import {
-	getCustomer,
-	setCustomer,
-	removeCustomer,
-} from "./actions";
+import {getCustomer, removeCustomer, editCustomer, deleteCustomer} from "./actions";
 
 export default createReducer([], {
 	[getCustomer]: (state, action) => {
-		return state
+		return action.payload;
 	},
-	[setCustomer]: (state, action) => {
-		return action.payload
+
+	[deleteCustomer]: (state, action) => {
+		const cusIndex = state.findIndex((customers) => customers.id === action.payload.id);
+		state.splice(cusIndex, 1);
 	},
-	[removeCustomer]: (state, action) =>{
-		return state = {}
-	}
+	[editCustomer]: (state, action) => {
+		const cusIndex = state.findIndex((customers) => customers.id === action.payload.id);
+		state[cusIndex] = action.payload;
+	},
+	[removeCustomer]: (state, action) => {
+		return (state = {});
+	},
 });

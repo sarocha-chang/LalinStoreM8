@@ -1,10 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
-import itesmsReducers from "./Item/reducer";
+import itemsReducers from "./Item/reducer";
 import customersReducers from "./Customer/reducer";
-
+import categoryReducers from "./Category/reducer";
 export default configureStore({
 	reducer: {
-		items: itesmsReducers,
+		items: itemsReducers,
+		category: categoryReducers,
 		customers: customersReducers,
 	},
 });

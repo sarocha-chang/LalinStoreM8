@@ -7,17 +7,17 @@ import axios from "axios";
 import React from "react";
 import "boxicons";
 
-import {deleteItem} from "../../app/Item/actions";
+import {deleteCategory} from "../../app/Category/actions";
 
-function DetailTable({className, data}) {
+function DetailCate({className, data}) {
 	const [id] = React.useState(data.id);
 	const [name, setName] = React.useState(checkCategory(data.category_id));
 	const dispatch = useDispatch();
 
-	function delete_item() {
+	function delete_category() {
 		return Swal.fire({
 			title: "โปรดยืนยัน",
-			text: "ต้องการลบสินค้านี้ออกจากคลังหรือไม่",
+			text: "ต้องการลบสมาชิกคนนี้ออกจากระบบหรือไม่",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonText: "ไม่",
@@ -26,9 +26,9 @@ function DetailTable({className, data}) {
 			confirmButtonText: "ใช่",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				Swal.fire("ลบสำเร็จ", "ลบสินค้าในคลังเรียบร้อยแล้ว", "success");
-				axios.delete(`/admin/deleteItem/${id}`).then(() => {
-					dispatch(deleteItem({id: id}));
+				Swal.fire("ลบสำเร็จ", "ลบสมาชิกออกจากระบบเรียบร้อยแล้ว", "success");
+				axios.delete(`/admin/deleteCategory/${id}`).then(() => {
+					dispatch(deleteCategory({id: id}));
 				});
 			}
 		});
@@ -43,34 +43,23 @@ function DetailTable({className, data}) {
 	return (
 		<tr className={className}>
 			<td>{data.id}</td>
-			<td>
-				<img src={data.image} alt={data.name} className="imgItem" />
-			</td>
 			<td>{data.name}</td>
-			<td>{data.quantity}</td>
-			<td className="des">
-				<span className="text-overflow">{data.description}</span>
-			</td>
-			<td>{name}</td>
-			<td>{data.price}</td>
-			<td>{data.status}</td>
-			<td>{data.rating}</td>
 			<td>
 				<Link to={`/admin/edit-item/${data.id}`}>
 					<box-icon name="edit" />
 				</Link>
-				<box-icon name="trash" type="solid" color="#f04e4e" onClick={delete_item} />
+				<box-icon name="trash" type="solid" color="#f04e4e" onClick={delete_category} />
 			</td>
 		</tr>
 	);
 }
 
-DetailTable.propTypes = {
+DetailCate.propTypes = {
 	className: PropTypes.string.isRequired,
 	data: PropTypes.object.isRequired,
 };
 
-export default styled(DetailTable)`
+export default styled(DetailCate)`
 	border-bottom: 1px solid #e0e0e0;
 	td.des {
 		width: 200px;

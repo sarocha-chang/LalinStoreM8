@@ -7,20 +7,22 @@ import {Redirect, useHistory} from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {fetchItem} from "../../app/Item/actions";
-import DetailTable from "./DetailTable";
+import {getCustomer,deleteCustomer} from "../../app/Customer/actions";
+import DetailCustomer from "./DetailCustomer";
 
-function Items({className}) {
+function Customers({className}) {
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
 	const history = useHistory();
-	const items = useSelector((state) => state.items);
+	const customer = useSelector((state) => state.customers);
 	const dispatch = useDispatch();
 	const [keyword, setKeyword] = useState("");
 
 	useEffect(() => {
 		async function get() {
-			await axios.get("/all/show").then((res) => {
-				dispatch(fetchItem(res.data.item));
+			await axios.get("/admin/showCustomer").then((res) => {
+				let cus = res.data.customer;
+				console.log(cus);
+				dispatch(getCustomer(cus));
 			});
 		}
 		get();
@@ -34,17 +36,17 @@ function Items({className}) {
 	// 	return <Redirect to="/home" />;
 	// }
 
-	function useSearch(event) {
-		setKeyword(event.target.value);
-		axios
-			.get(`/all/search/${keyword}`)
-			.then((res) => {
-				dispatch(fetchItem(res.data.item));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}
+	// function useSearch(event) {
+	// 	setKeyword(event.target.value);
+	// 	axios
+	// 		.get(`/all/search/${keyword}`)
+	// 		.then((res) => {
+	// 			dispatch(getCustomer(res.data.item));
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// }
 
 	function onClick() {
 		history.push("/admin/add-item");
@@ -52,39 +54,35 @@ function Items({className}) {
 
 	return (
 		<div className={className}>
-			<h1 className="top">ข้อมูลสินค้า</h1>
+			<h1 className="top">ข้อมูลสมาชิก</h1>
 			<form className="form-inline">
 				<input
 					type="text"
 					className="search"
-					placeholder="Search by item's name"
-					onChange={useSearch}
+					placeholder="Search by customer's name"
+					// onChange={useSearch}
 					value={keyword}
 				/>
 			</form>
 			<div className="table">
-				<button className="add" onClick={onClick}>
-					เพิ่มสินค้า +
-				</button>
 				<table className="ShowItem">
 					<thead>
 						<tr>
 							<th>id</th>
-							<th>รูป</th>
-							<th>ชื่อสินค้า</th>
-							<th>จำนวน</th>
-							<th>คำอธิบาย</th>
+							<th>ชื่อ</th>
+							<th>นามสกุล</th>
+							<th>ชื่อผู้ใช้</th>
+							<th>เบอร์โทรศัพท์</th>
+							<th>อีเมลล์</th>
+							<th></th>
 							<th>ประเภท</th>
-							<th>ราคา</th>
-							<th>สถานะ</th>
-							<th>คะแนน</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						{items ? (
-							items.map((data) => {
-								return <DetailTable data={data} key={data.id} />;
+						{customer ? (
+							customer.map((data) => {
+								return <DetailCustomer data={data} key={data.id} />;
 							})
 						) : (
 							<div>Loading products....</div>
@@ -96,12 +94,12 @@ function Items({className}) {
 	);
 }
 
-Items.propTypes = {
+Customers.propTypes = {
 	className: PropTypes.string.isRequired,
-	items: PropTypes.node,
+	customers: PropTypes.node,
 };
 
-export default styled(Items)`
+export default styled(Customers)`
 	margin-bottom: 50px;
 	width: 98%;
 	h1.top {

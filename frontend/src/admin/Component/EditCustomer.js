@@ -5,57 +5,54 @@ import {useDispatch} from "react-redux";
 import {Link, useParams, useHistory} from "react-router-dom";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
-import {editItem} from "../../app/Item/actions";
+
+import {editCustomer} from "../../app/Customer/actions";
 import withReactContent from "sweetalert2-react-content";
 
 // import Error from "./Error";
-import Category from "./Category";
 
-function EditItem({className}) {
+function EditCustomer({className}) {
 	const {id} = useParams();
-	const [name, setName] = useState("");
-	const [description, setDescription] = useState("");
+	const [firstname, setFirstName] = useState("");
+	const [lastname, setLastName] = useState("");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");
 	const [type, setType] = useState("");
-	const [price, setPrice] = useState("");
-	const [quantity, setQuantity] = useState("");
-	const [image, setImage] = useState("");
-	const [status, setStatus] = useState("");
-	const [rating, setRating] = useState("");
 
 	const history = useHistory();
 	const dispatch = useDispatch();
 	useEffect(() => {
-		axios.get(`/all/showDetail/${id}`).then((res) => {
+		axios.get(`/admin/showCustomerDetail/${id}`).then((res) => {
 			console.log(res.data);
-			let {name, description, category_id, price, quantity, image, status, rating} = res.data.item;
-			setName(name);
-			setDescription(description);
-			setType(category_id);
-			setPrice(price);
-			setQuantity(quantity);
-			setImage(image);
-			setStatus(status);
-			setRating(rating);
+			let {firstname, lastname, username, password, email, phone, type_id} = res.data.customer;
+			setFirstName(firstname);
+			setLastName(lastname);
+			setUsername(username);
+			setPassword(password);
+			setEmail(email);
+			setPhone(phone);
+			setType(type_id);
 		});
 	}, [id]);
 
 	async function onSubmit(event) {
 		event.preventDefault();
 		const data = {
-			name: name,
-			description: description,
-			category_id: type,
-			price: price,
-			quantity: quantity,
-			image: image,
-			status: status,
-			rating: rating,
+			firstname: firstname,
+			lastname: lastname,
+			username: username,
+			password: password,
+			email: email,
+			phone: phone,
+			type_id: type,
 		};
 		try {
-			const item = await axios.put(`/admin/updateItem/${id}`, data);
-			dispatch(editItem(item.data));
-			alertSubmit(image);
-			history.push("/admin/item");
+			const item = await axios.put(`/admin/updateCustomer/${id}`, data);
+			dispatch(editCustomer(item.data));
+			alertSubmit();
+			history.push("/admin/customers");
 		} catch (error) {
 			const warn = error.response.data;
 			const textError = warn.map((error) => {
@@ -78,33 +75,89 @@ function EditItem({className}) {
 	// }
 	return (
 		<div className={className}>
-			<h1 className="top"> แก้ไขข้อมูลสินค้า </h1>
+			<h1 className="top"> แก้ไขข้อมูลสมาชิก </h1>
 			<form className="add">
 				<div className="row">
 					<div className="col-10">
-						<label> ชื่อสินค้า: </label>
+						<label> ชื่อ: </label>
 					</div>
 					<div className="col-90">
 						<input
 							type="text"
-							placeholder="กรุณากรอกชื่อสินค้า"
+							placeholder="กรุณากรอกชื่อ"
 							className="medium"
-							onChange={(event) => setName(event.target.value)}
-							value={name}
+							onChange={(event) => setFirstName(event.target.value)}
+							value={firstname}
 						/>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col-10">
-						<label> คำอธิบาย: </label>
+						<label> นามสกุล: </label>
 					</div>
 					<div className="col-90">
-						<textarea
+						<input
 							type="text"
-							placeholder="กรุณากรอกคำอธิบาย. . . . . . . . . ."
-							className="long"
-							onChange={(event) => setDescription(event.target.value)}
-							value={description}
+							placeholder="กรุณากรอกนามสกุล"
+							className="medium"
+							onChange={(event) => setLastName(event.target.value)}
+							value={lastname}
+						/>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-10">
+						<label> ชื่อผู้ใช้: </label>
+					</div>
+					<div className="col-90">
+						<input
+							type="text"
+							placeholder="กรุณากรอกชื่อผู้ใช้"
+							className="short"
+							onChange={(event) => setUsername(event.target.value)}
+							value={username}
+						/>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-10">
+						<label> รหัสผ่าน: </label>
+					</div>
+					<div className="col-90">
+						<input
+							type="text"
+							placeholder="กรุณากรอกรหัสผ่าน"
+							className="short"
+							onChange={(event) => setPassword(event.target.value)}
+							value={password}
+						/>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-10">
+						<label> อีเมลล์: </label>
+					</div>
+					<div className="col-90">
+						<input
+							type="text"
+							placeholder="กรุณากรอกอีเมลล์"
+							className="medium"
+							onChange={(event) => setEmail(event.target.value)}
+							value={email}
+						/>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-10">
+						<label> เบอร์โทรศัพท์: </label>
+					</div>
+					<div className="col-90">
+						<input
+							type="text"
+							placeholder="กรุณากรอกเบอร์โทรศัพท์"
+							className="short"
+							onChange={(event) => setPhone(event.target.value)}
+							value={phone}
 						/>
 					</div>
 				</div>
@@ -114,85 +167,7 @@ function EditItem({className}) {
 					</div>
 					<div className="col-90">
 						<select onChange={(event) => setType(event.target.value)} value={type}>
-							{/* <option>
-							{type ? (
-								type.map((data) => {
-									return <Category />;
-								})
-							) : (
-								<div>Loading category....</div>
-							)}
-							</option> */}
-							<option> haircare </option> <option> bodycare </option>
-							<option> facecare </option> <option> vitamin </option>
-						</select>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
-						<label> ราคา: </label>
-					</div>
-					<div className="col-90">
-						<input
-							type="text"
-							placeholder="กรุณากรอกราคา"
-							className="short"
-							onChange={(event) => setPrice(event.target.value)}
-							value={price}
-						/>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
-						<label> จำนวน: </label>
-					</div>
-					<div className="col-90">
-						<input
-							type="text"
-							placeholder="กรุณากรอกจำนวนสินค้า"
-							className="short"
-							onChange={(event) => setQuantity(event.target.value)}
-							value={quantity}
-						/>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
-						<label> ลิงค์รูปภาพ: </label>
-					</div>
-					<div className="col-90">
-						<input
-							type="text"
-							placeholder="กรุณากรอกลิงค์รูปภาพ"
-							className="medium"
-							onChange={(event) => setImage(event.target.value)}
-							value={image}
-						/>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
-						<label> สถานะ: </label>
-					</div>
-					<div className="col-90">
-						<select onChange={(event) => setStatus(event.target.value)} value={status}>
-							<option> ปกติ </option> <option> มาใหม่ </option>
-							<option> ยอดนิยม </option>
-						</select>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
-						<label> คะแนน: </label>
-					</div>
-					<div className="col-90">
-						<select onChange={(event) => setRating(event.target.value)} value={rating}>
-							<option> 0 </option> <option> 0.5 </option>
-							<option> 1 </option> <option> 1.5 </option>
-							<option> 2 </option> <option> 2.5 </option>
-							<option> 3 </option> <option> 3.5 </option>
-							<option> 4 </option> <option> 4.5 </option>
-							<option> 5 </option>
+							<option> admin </option> <option> customer </option>
 						</select>
 					</div>
 				</div>
@@ -200,7 +175,7 @@ function EditItem({className}) {
 					<button type="submit" className="submit" onClick={onSubmit}>
 						ยืนยัน
 					</button>
-					<Link to="/admin/item">
+					<Link to="/admin/customers">
 						<button type="cancel" className="cancel">
 							ยกเลิก
 						</button>
@@ -210,24 +185,21 @@ function EditItem({className}) {
 		</div>
 	);
 }
-EditItem.propTypes = {
+EditCustomer.propTypes = {
 	className: PropTypes.string.isRequired,
-	item: PropTypes.object.isRequired,
+	customers: PropTypes.object.isRequired,
 	onSubmit: PropTypes.func.isRequired,
 };
 
-function alertSubmit(imageUrl) {
+function alertSubmit() {
 	Swal.fire({
-		title: "แก้ไขสำเร็จ",
-		text: "แก้ไขสินค้าในคลังเรียบร้อยแล้ว",
+		title: "แก้ไขข้อมูลสำเร็จ",
+		text: "แก้ไขข้อมูลสมาชิกเรียบร้อยแล้ว",
 		confirmButtonColor: "#005488",
-		imageUrl: imageUrl,
-		imageHeight: 200,
-		imageAlt: "Custom image",
 	});
 }
 
-export default styled(EditItem)`
+export default styled(EditCustomer)`
 	font-family: "IBM Plex Sans Thai", sans-serif;
 	h1.top {
 		font-family: "IBM Plex Sans Thai", sans-serif;

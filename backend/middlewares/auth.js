@@ -16,13 +16,14 @@ passport.use(
 	new LocalStrategy(async (username, password, done) => {
 		try {
 			let customer = await customers.findOne({
-				where: {username: username},
+				where: {username: username, password: password},
 			});
 			if (customer) {
-				checkPass = jwt.decode(customer.dataValues.password, privateKey, {algorithms: ["RS256"]});
-				if (checkPass == password) {
-					done(null, customer.dataValues);
-				} else done(null, false, {message: "Invalid password"});
+				done(null, customer.dataValues);
+				// 	 checkPass = jwt.decode(customer.dataValues.password, privateKey, {algorithms: ["RS256"]});
+				// 	 if (checkPass == password) {
+				// 	 	done(null, customer.dataValues);
+				// 	 } else done(null, false, {message: "Invalid password"});
 			} else done(null, false, {message: "Invalid username"});
 		} catch (err) {
 			done(err);

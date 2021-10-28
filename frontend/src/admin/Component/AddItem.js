@@ -11,8 +11,7 @@ import withReactContent from "sweetalert2-react-content";
 // import Error from "./Error";
 import Category from "./Category";
 
-function EditItem({className}) {
-	const {id} = useParams();
+function AddItem({className}) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [type, setType] = useState("");
@@ -21,23 +20,8 @@ function EditItem({className}) {
 	const [image, setImage] = useState("");
 	const [status, setStatus] = useState("");
 	const [rating, setRating] = useState("");
-
 	const history = useHistory();
 	const dispatch = useDispatch();
-	useEffect(() => {
-		axios.get(`/all/showDetail/${id}`).then((res) => {
-			console.log(res.data);
-			let {name, description, category_id, price, quantity, image, status, rating} = res.data.item;
-			setName(name);
-			setDescription(description);
-			setType(category_id);
-			setPrice(price);
-			setQuantity(quantity);
-			setImage(image);
-			setStatus(status);
-			setRating(rating);
-		});
-	}, [id]);
 
 	async function onSubmit(event) {
 		event.preventDefault();
@@ -52,7 +36,7 @@ function EditItem({className}) {
 			rating: rating,
 		};
 		try {
-			const item = await axios.put(`/admin/updateItem/${id}`, data);
+			const item = await axios.put(`/admin/addItem/`, data);
 			dispatch(editItem(item.data));
 			alertSubmit(image);
 			history.push("/admin/item");
@@ -78,7 +62,7 @@ function EditItem({className}) {
 	// }
 	return (
 		<div className={className}>
-			<h1 className="top"> แก้ไขข้อมูลสินค้า </h1>
+			<h1 className="top"> เพิ่มสินค้า </h1>
 			<form className="add">
 				<div className="row">
 					<div className="col-10">
@@ -90,7 +74,6 @@ function EditItem({className}) {
 							placeholder="กรุณากรอกชื่อสินค้า"
 							className="medium"
 							onChange={(event) => setName(event.target.value)}
-							value={name}
 						/>
 					</div>
 				</div>
@@ -104,7 +87,6 @@ function EditItem({className}) {
 							placeholder="กรุณากรอกคำอธิบาย. . . . . . . . . ."
 							className="long"
 							onChange={(event) => setDescription(event.target.value)}
-							value={description}
 						/>
 					</div>
 				</div>
@@ -113,7 +95,7 @@ function EditItem({className}) {
 						<label> ประเภท: </label>
 					</div>
 					<div className="col-90">
-						<select onChange={(event) => setType(event.target.value)} value={type}>
+						<select onChange={(event) => setType(event.target.value)}>
 							{/* <option>
 							{type ? (
 								type.map((data) => {
@@ -123,8 +105,11 @@ function EditItem({className}) {
 								<div>Loading category....</div>
 							)}
 							</option> */}
-							<option> haircare </option> <option> bodycare </option>
-							<option> facecare </option> <option> vitamin </option>
+							<option selected disabled hidden>
+								กรุณาเลือกประเภทสินค้า
+							</option>
+							<option value="1"> haircare </option> <option value="2"> bodycare </option>
+							<option value="3"> facecare </option> <option value="4"> vitamin </option>
 						</select>
 					</div>
 				</div>
@@ -138,7 +123,6 @@ function EditItem({className}) {
 							placeholder="กรุณากรอกราคา"
 							className="short"
 							onChange={(event) => setPrice(event.target.value)}
-							value={price}
 						/>
 					</div>
 				</div>
@@ -152,7 +136,6 @@ function EditItem({className}) {
 							placeholder="กรุณากรอกจำนวนสินค้า"
 							className="short"
 							onChange={(event) => setQuantity(event.target.value)}
-							value={quantity}
 						/>
 					</div>
 				</div>
@@ -166,7 +149,6 @@ function EditItem({className}) {
 							placeholder="กรุณากรอกลิงค์รูปภาพ"
 							className="medium"
 							onChange={(event) => setImage(event.target.value)}
-							value={image}
 						/>
 					</div>
 				</div>
@@ -175,7 +157,10 @@ function EditItem({className}) {
 						<label> สถานะ: </label>
 					</div>
 					<div className="col-90">
-						<select onChange={(event) => setStatus(event.target.value)} value={status}>
+						<select onChange={(event) => setStatus(event.target.value)}>
+							<option selected disabled hidden>
+								กรุณาเลือกสถานะสินค้า
+							</option>
 							<option> ปกติ </option> <option> มาใหม่ </option>
 							<option> ยอดนิยม </option>
 						</select>
@@ -186,7 +171,10 @@ function EditItem({className}) {
 						<label> คะแนน: </label>
 					</div>
 					<div className="col-90">
-						<select onChange={(event) => setRating(event.target.value)} value={rating}>
+						<select onChange={(event) => setRating(event.target.value)}>
+							<option selected disabled hidden>
+								กรุณาเลือกคะแนนความนิยมของสินค้า
+							</option>
 							<option> 0 </option> <option> 0.5 </option>
 							<option> 1 </option> <option> 1.5 </option>
 							<option> 2 </option> <option> 2.5 </option>
@@ -210,7 +198,7 @@ function EditItem({className}) {
 		</div>
 	);
 }
-EditItem.propTypes = {
+AddItem.propTypes = {
 	className: PropTypes.string.isRequired,
 	item: PropTypes.object.isRequired,
 	onSubmit: PropTypes.func.isRequired,
@@ -218,8 +206,8 @@ EditItem.propTypes = {
 
 function alertSubmit(imageUrl) {
 	Swal.fire({
-		title: "แก้ไขสำเร็จ",
-		text: "แก้ไขสินค้าในคลังเรียบร้อยแล้ว",
+		title: "เพิ่มสินค้าสำเร็จ",
+		text: "เพิ่มสินค้าในคลังเรียบร้อยแล้ว",
 		confirmButtonColor: "#005488",
 		imageUrl: imageUrl,
 		imageHeight: 200,
@@ -227,7 +215,7 @@ function alertSubmit(imageUrl) {
 	});
 }
 
-export default styled(EditItem)`
+export default styled(AddItem)`
 	font-family: "IBM Plex Sans Thai", sans-serif;
 	h1.top {
 		font-family: "IBM Plex Sans Thai", sans-serif;
@@ -284,7 +272,7 @@ export default styled(EditItem)`
 		}
 		select {
 			font-family: "IBM Plex Sans Thai", sans-serif;
-			width: 12%;
+			width: 28%;
 			border-radius: 5px;
 			padding: 8px;
 			font-size: 16px;

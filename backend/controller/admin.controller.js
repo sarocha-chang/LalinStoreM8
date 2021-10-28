@@ -156,6 +156,26 @@ module.exports = {
 		next();
 	},
 
+	searchCategory: async (req, res, next) => {
+		try {
+			const {id} = req.params;
+			let cate = await category.findByPk(id);
+			if (cate) {
+				res.status(200).json({
+					message: " Search category success",
+					cate: cate.name,
+				});
+			} else {
+				res.status(404).json({
+					message: "Category not found",
+				});
+			}
+		} catch (error) {
+			next(error);
+		}
+		next();
+	},
+
 	deleteCategory: async (req, res, next) => {
 		try {
 			const categories = await category.findByPk(req.params.id);
@@ -325,5 +345,24 @@ module.exports = {
 			}
 		}
 		next();
+	},
+
+	showCustomerDetail: async (req, res, next) => {
+		try {
+			const customer = await customers.findByPk(req.params.id);
+			if (customer) {
+				res.status(200).json({
+					message: "ดึงข้อมูลของลูกค้าสำเร็จ!",
+					customer,
+				});
+			} else {
+				res.status(404).json({
+					message: "ไม่พบข้อมูลลูกค้าในระบบ!",
+				});
+			}
+			next();
+		} catch (error) {
+			next(error);
+		}
 	},
 };

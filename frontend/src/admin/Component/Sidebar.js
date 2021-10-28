@@ -20,15 +20,18 @@ function Sidebar({className}) {
 					Lalin
 				</Link>
 				<Link to="/admin" className="menu">
-					Home
+					<box-icon name="home" color="#544e3d"></box-icon> Home
 				</Link>
 				<Link to="/admin/item" className="menu">
+					<box-icon name="folder" color="#544e3d"></box-icon>
 					Items
 				</Link>
 				<Link to="/admin/category" className="menu">
+					<box-icon name="category" color="#544e3d"></box-icon>
 					Category
 				</Link>
 				<Link to="/admin/customers" className="menu">
+					<box-icon name="group" color="#544e3d"></box-icon>
 					Customers
 				</Link>
 			</nav>
@@ -60,14 +63,18 @@ export default styled(Sidebar)`
 	}
 	.menu {
 		margin-top: 1rem;
-		display: block;
-		font-size: 20px;
+		display: flex;
+		font-size: 18px;
+		font-weight: bold;
 		color: #544e3d;
 		padding: 20px;
 		text-decoration: none;
 		text-align: center;
 		border-radius: 10px;
 		transition: 0.5s;
+	}
+	box-icon {
+		margin-right: 1rem;
 	}
 	.menu:hover,
 	.menu:focus {

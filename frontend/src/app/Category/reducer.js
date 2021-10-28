@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 
-import {fetchCategory,editCategory,deleteCategory,searchCategory, addCategory} from "./actions";
+import {fetchCategory, editCategory, deleteCategory, searchCategory, addCategory} from "./actions";
 
 export default createReducer([], {
 	[fetchCategory]: (state, action) => {
@@ -10,17 +10,17 @@ export default createReducer([], {
 		return action.payload;
 	},
 	[editCategory]: (state, action) => {
-		const itemIndex = state.findIndex((items) => items.id === action.payload.id);
-		state[itemIndex] = action.payload;
+		const cateIndex = state.findIndex((categories) => categories.id === action.payload.id);
+		state[cateIndex] = action.payload;
 	},
 	[deleteCategory]: (state, action) => {
-		const itemIndex = state.findIndex((items) => items.id === action.payload.id);
-		state.splice(itemIndex, 1);
+		const cateIndex = state.findIndex((categories) => categories.id === action.payload.id);
+		state.splice(cateIndex, 1);
 	},
 	[searchCategory]: (state, action) => {
 		const id = action.payload;
-		return state.filter((items) => {
-			return items.id === id;
+		return state.filter((categories) => {
+			return categories.id === id;
 		});
 	},
 });

@@ -7,20 +7,21 @@ import {Redirect, useHistory} from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {fetchItem} from "../../app/Item/actions";
-import DetailTable from "./DetailTable";
+import {fetchCategory} from "../../app/Category/actions";
+import DetailCate from "./DetailCate";
 
-function Items({className}) {
+function Category({className}) {
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
 	const history = useHistory();
-	const items = useSelector((state) => state.items);
+	const category = useSelector((state) => state.category);
 	const dispatch = useDispatch();
 	const [keyword, setKeyword] = useState("");
 
 	useEffect(() => {
 		async function get() {
-			await axios.get("/all/show").then((res) => {
-				dispatch(fetchItem(res.data.item));
+			await axios.get("/admin/showCategory").then((res) => {
+				let cate = res.data.categories;
+				dispatch(fetchCategory(cate));
 			});
 		}
 		get();
@@ -34,57 +35,51 @@ function Items({className}) {
 	// 	return <Redirect to="/home" />;
 	// }
 
-	function useSearch(event) {
-		setKeyword(event.target.value);
-		axios
-			.get(`/all/search/${keyword}`)
-			.then((res) => {
-				dispatch(fetchItem(res.data.item));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}
+	// function useSearch(event) {
+	// 	setKeyword(event.target.value);
+	// 	axios
+	// 		.get(`/all/search/${keyword}`)
+	// 		.then((res) => {
+	// 			dispatch(fetchCategory(res.data.item));
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// }
 
 	function onClick() {
-		history.push("/admin/add-item");
+		// history.push("/admin/add-item");
 	}
 
 	return (
 		<div className={className}>
-			<h1 className="top">ข้อมูลสินค้า</h1>
+			<h1 className="top">ข้อมูลประเภทสินค้า</h1>
 			<form className="form-inline">
 				<input
 					type="text"
 					className="search"
-					placeholder="Search by item's name"
-					onChange={useSearch}
+					placeholder="Search by category's name"
+					// onChange={useSearch}
 					value={keyword}
 				/>
 			</form>
 			<div className="table">
 				<button className="add" onClick={onClick}>
-					เพิ่มสินค้า +
+					เพิ่มประเภทสินค้า +
 				</button>
 				<table className="ShowItem">
 					<thead>
 						<tr>
 							<th>id</th>
-							<th>รูป</th>
-							<th>ชื่อสินค้า</th>
-							<th>จำนวน</th>
-							<th>คำอธิบาย</th>
-							<th>ประเภท</th>
-							<th>ราคา</th>
-							<th>สถานะ</th>
-							<th>คะแนน</th>
+							<th>ชื่อประเภทสินค้า</th>
+							<th>สินค้าในประเภท</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						{items ? (
-							items.map((data) => {
-								return <DetailTable data={data} key={data.id} />;
+						{category ? (
+							category.map((data) => {
+								return <DetailCate data={data} key={data.id} />;
 							})
 						) : (
 							<div>Loading products....</div>
@@ -96,12 +91,12 @@ function Items({className}) {
 	);
 }
 
-Items.propTypes = {
+Category.propTypes = {
 	className: PropTypes.string.isRequired,
-	items: PropTypes.node,
+	category: PropTypes.node,
 };
 
-export default styled(Items)`
+export default styled(Category)`
 	margin-bottom: 50px;
 	width: 98%;
 	h1.top {
@@ -115,7 +110,7 @@ export default styled(Items)`
 	}
 
 	.add {
-		margin-left: 86%;
+		margin-left: 83%;
 		margin-bottom: 1rem;
 		padding: 7px;
 		border-radius: 5px;
