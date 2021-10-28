@@ -8,29 +8,43 @@ import PropTypes from "prop-types";
 import {editItem} from "../../app/Item/actions";
 import withReactContent from "sweetalert2-react-content";
 
-// import Error from "./Error";
-import Category from "./Category";
+import Error from "./Error";
 
 function EditItem({className}) {
 	const {id} = useParams();
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
-	const [type, setType] = useState("");
 	const [price, setPrice] = useState("");
 	const [quantity, setQuantity] = useState("");
 	const [image, setImage] = useState("");
 	const [status, setStatus] = useState("");
 	const [rating, setRating] = useState("");
+	const [cate, setCate] = useState("");
 
 	const history = useHistory();
 	const dispatch = useDispatch();
+
+	const [type, setType] = useState([]);
+
+	useEffect(() => {
+		const getType = async () => {
+			try {
+				const nameType = await axios.get(`/admin/showCategory`);
+				setType(nameType.data.categories);
+			} catch (error) {
+				console.log(error.response);
+			}
+		};
+		getType();
+	}, []);
+
 	useEffect(() => {
 		axios.get(`/all/showDetail/${id}`).then((res) => {
 			console.log(res.data);
 			let {name, description, category_id, price, quantity, image, status, rating} = res.data.item;
 			setName(name);
 			setDescription(description);
-			setType(category_id);
+			setCate(category_id);
 			setPrice(price);
 			setQuantity(quantity);
 			setImage(image);
@@ -44,7 +58,7 @@ function EditItem({className}) {
 		const data = {
 			name: name,
 			description: description,
-			category_id: type,
+			category_id: cate,
 			price: price,
 			quantity: quantity,
 			image: image,
@@ -61,21 +75,21 @@ function EditItem({className}) {
 			const textError = warn.map((error) => {
 				return error.message;
 			});
-			// alertError(textError);
+			alertError(textError);
 		}
 	}
 
-	// function alertError(textError) {
-	// 	const err = new Array(...textError);
-	// 	const swal = withReactContent(Swal);
-	// 	swal.fire({
-	// 		icon: "warning",
-	// 		title: "ERROR INPUT",
-	// 		width: 800,
-	// 		html: <Error err={err}></Error>,
-	// 		confirmButtonColor: "#005488",
-	// 	});
-	// }
+	function alertError(textError) {
+		const err = new Array(...textError);
+		const swal = withReactContent(Swal);
+		swal.fire({
+			icon: "warning",
+			title: "ERROR INPUT",
+			width: 800,
+			html: <Error err={err}></Error>,
+			confirmButtonColor: "#005488",
+		});
+	}
 	return (
 		<div className={className}>
 			<h1 className="top"> แก้ไขข้อมูลสินค้า </h1>
@@ -113,18 +127,21 @@ function EditItem({className}) {
 						<label> ประเภท: </label>
 					</div>
 					<div className="col-90">
-						<select onChange={(event) => setType(event.target.value)} value={type}>
-							{/* <option>
+						<select onChange={(event) => setCate(event.target.value)}>
+							<option value="DEFAULT" hidden>
+								กรุณาเลือกประเภทสินค้า
+							</option>
 							{type ? (
 								type.map((data) => {
-									return <Category />;
+									return (
+										<option key={data.id} value={data.id}>
+											{data.name}
+										</option>
+									);
 								})
 							) : (
 								<div>Loading category....</div>
 							)}
-							</option> */}
-							<option> haircare </option> <option> bodycare </option>
-							<option> facecare </option> <option> vitamin </option>
 						</select>
 					</div>
 				</div>
@@ -284,7 +301,7 @@ export default styled(EditItem)`
 		}
 		select {
 			font-family: "IBM Plex Sans Thai", sans-serif;
-			width: 12%;
+			width: 28%;
 			border-radius: 5px;
 			padding: 8px;
 			font-size: 16px;

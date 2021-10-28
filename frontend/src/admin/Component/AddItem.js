@@ -5,39 +5,53 @@ import {useDispatch} from "react-redux";
 import {Link, useParams, useHistory} from "react-router-dom";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
-import {editItem} from "../../app/Item/actions";
+import {addItem} from "../../app/Item/actions";
 import withReactContent from "sweetalert2-react-content";
 
-// import Error from "./Error";
-import Category from "./Category";
+import Error from "./Error";
 
 function AddItem({className}) {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
-	const [type, setType] = useState("");
 	const [price, setPrice] = useState("");
 	const [quantity, setQuantity] = useState("");
 	const [image, setImage] = useState("");
 	const [status, setStatus] = useState("");
 	const [rating, setRating] = useState("");
+	const [cate, setCate] = useState("");
 	const history = useHistory();
 	const dispatch = useDispatch();
+
+	const [type, setType] = useState([]);
+
+	useEffect(() => {
+		const getType = async () => {
+			try {
+				const nameType = await axios.get(`/admin/showCategory`);
+				setType(nameType.data.categories);
+			} catch (error) {
+				console.log(error.response);
+			}
+		};
+		getType();
+	}, []);
 
 	async function onSubmit(event) {
 		event.preventDefault();
 		const data = {
 			name: name,
 			description: description,
-			category_id: type,
 			price: price,
 			quantity: quantity,
 			image: image,
+			category_id: cate,
 			status: status,
 			rating: rating,
 		};
 		try {
-			const item = await axios.put(`/admin/addItem/`, data);
-			dispatch(editItem(item.data));
+			const items = await axios.post(`/admin/addItem/`, data);
+			console.log(items);
+			dispatch(addItem(items.data));
 			alertSubmit(image);
 			history.push("/admin/item");
 		} catch (error) {
@@ -45,21 +59,21 @@ function AddItem({className}) {
 			const textError = warn.map((error) => {
 				return error.message;
 			});
-			// alertError(textError);
+			alertError(textError);
 		}
 	}
 
-	// function alertError(textError) {
-	// 	const err = new Array(...textError);
-	// 	const swal = withReactContent(Swal);
-	// 	swal.fire({
-	// 		icon: "warning",
-	// 		title: "ERROR INPUT",
-	// 		width: 800,
-	// 		html: <Error err={err}></Error>,
-	// 		confirmButtonColor: "#005488",
-	// 	});
-	// }
+	function alertError(textError) {
+		const err = new Array(...textError);
+		const swal = withReactContent(Swal);
+		swal.fire({
+			icon: "warning",
+			title: "ERROR INPUT",
+			width: 800,
+			html: <Error err={err}></Error>,
+			confirmButtonColor: "#005488",
+		});
+	}
 	return (
 		<div className={className}>
 			<h1 className="top"> เพิ่มสินค้า </h1>
@@ -95,21 +109,21 @@ function AddItem({className}) {
 						<label> ประเภท: </label>
 					</div>
 					<div className="col-90">
-						<select onChange={(event) => setType(event.target.value)}>
-							{/* <option>
+						<select onChange={(event) => setCate(event.target.value)}>
+							<option value="DEFAULT" hidden>
+								กรุณาเลือกประเภทสินค้า
+							</option>
 							{type ? (
 								type.map((data) => {
-									return <Category />;
+									return (
+										<option key={data.id} value={data.id}>
+											{data.name}
+										</option>
+									);
 								})
 							) : (
 								<div>Loading category....</div>
 							)}
-							</option> */}
-							<option selected disabled hidden>
-								กรุณาเลือกประเภทสินค้า
-							</option>
-							<option value="1"> haircare </option> <option value="2"> bodycare </option>
-							<option value="3"> facecare </option> <option value="4"> vitamin </option>
 						</select>
 					</div>
 				</div>
@@ -158,7 +172,7 @@ function AddItem({className}) {
 					</div>
 					<div className="col-90">
 						<select onChange={(event) => setStatus(event.target.value)}>
-							<option selected disabled hidden>
+							<option value="DEFAULT" hidden>
 								กรุณาเลือกสถานะสินค้า
 							</option>
 							<option> ปกติ </option> <option> มาใหม่ </option>
@@ -172,7 +186,7 @@ function AddItem({className}) {
 					</div>
 					<div className="col-90">
 						<select onChange={(event) => setRating(event.target.value)}>
-							<option selected disabled hidden>
+							<option value="DEFAULT" hidden>
 								กรุณาเลือกคะแนนความนิยมของสินค้า
 							</option>
 							<option> 0 </option> <option> 0.5 </option>
@@ -200,8 +214,6 @@ function AddItem({className}) {
 }
 AddItem.propTypes = {
 	className: PropTypes.string.isRequired,
-	item: PropTypes.object.isRequired,
-	onSubmit: PropTypes.func.isRequired,
 };
 
 function alertSubmit(imageUrl) {
