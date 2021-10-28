@@ -7,7 +7,7 @@ import {Redirect, useHistory} from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {getCustomer,deleteCustomer} from "../../app/Customer/actions";
+import {getCustomer, deleteCustomer} from "../../app/Customer/actions";
 import DetailCustomer from "./DetailCustomer";
 
 function Customers({className}) {
@@ -21,7 +21,6 @@ function Customers({className}) {
 		async function get() {
 			await axios.get("/admin/showCustomer").then((res) => {
 				let cus = res.data.customer;
-				console.log(cus);
 				dispatch(getCustomer(cus));
 			});
 		}
