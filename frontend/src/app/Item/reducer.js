@@ -7,7 +7,7 @@ export default createReducer([], {
 		return action.payload;
 	},
 	[addItem]: (state, action) => {
-		return action.payload;
+		state.push(action.payload);
 	},
 	[editItem]: (state, action) => {
 		const itemIndex = state.findIndex((items) => items.id === action.payload.id);

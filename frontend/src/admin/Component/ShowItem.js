@@ -122,13 +122,13 @@ export default styled(Items)`
 		background-color: #81bc9f;
 		color: white;
 		border: 1px solid #81bc9f;
-		transition: 1s;
+		transition: 0.5s;
 		position: relative;
 		box-shadow: 2px 2px #888888;
 	}
 	.add:hover {
 		border: 1px solid black;
-		transition: 1s;
+		transition: 0.5s;
 		background-color: #6aaa8b;
 		color: white;
 	}

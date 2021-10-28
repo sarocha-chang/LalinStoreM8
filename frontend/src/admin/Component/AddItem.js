@@ -50,17 +50,28 @@ function AddItem({className}) {
 		};
 		try {
 			const items = await axios.post(`/admin/addItem/`, data);
-			console.log(items);
-			dispatch(addItem(items.data));
+			dispatch(addItem(items.data.item));
 			alertSubmit(image);
 			history.push("/admin/item");
 		} catch (error) {
-			const warn = error.response.data;
-			const textError = warn.map((error) => {
-				return error.message;
-			});
-			alertError(textError);
+			if (error.response.data) {
+				const warn = error.response.data;
+				const textError = warn.map((error) => {
+					return error.message;
+				});
+				alertError(textError);
+			} else console.log(error);
 		}
+	}
+	function alertSubmit(imageUrl) {
+		Swal.fire({
+			title: "เพิ่มสินค้าสำเร็จ",
+			text: "เพิ่มสินค้าในคลังเรียบร้อยแล้ว",
+			confirmButtonColor: "#005488",
+			imageUrl: imageUrl,
+			imageHeight: 200,
+			imageAlt: "Custom image",
+		});
 	}
 
 	function alertError(textError) {
@@ -215,17 +226,6 @@ function AddItem({className}) {
 AddItem.propTypes = {
 	className: PropTypes.string.isRequired,
 };
-
-function alertSubmit(imageUrl) {
-	Swal.fire({
-		title: "เพิ่มสินค้าสำเร็จ",
-		text: "เพิ่มสินค้าในคลังเรียบร้อยแล้ว",
-		confirmButtonColor: "#005488",
-		imageUrl: imageUrl,
-		imageHeight: 200,
-		imageAlt: "Custom image",
-	});
-}
 
 export default styled(AddItem)`
 	font-family: "IBM Plex Sans Thai", sans-serif;

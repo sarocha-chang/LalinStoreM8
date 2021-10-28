@@ -167,13 +167,12 @@ function EditCustomer({className}) {
 					</div>
 					<div className="col-90">
 						<select onChange={(event) => setType(event.target.value)} value={type}>
-							<option> admin </option> <option> customer </option>
+							<option value="1"> admin </option> <option value="2"> customer </option>
 						</select>
 					</div>
 				</div>
 				<div className="butt">
 					<button type="submit" className="submit" onClick={onSubmit}>
-						ยืนยัน
 					</button>
 					<Link to="/admin/customers">
 						<button type="cancel" className="cancel">

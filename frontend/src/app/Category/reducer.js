@@ -7,7 +7,7 @@ export default createReducer([], {
 		return action.payload;
 	},
 	[addCategory]: (state, action) => {
-		return action.payload;
+		state.push(action.payload);
 	},
 	[editCategory]: (state, action) => {
 		const cateIndex = state.findIndex((categories) => categories.id === action.payload.id);

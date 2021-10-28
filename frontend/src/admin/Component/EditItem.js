@@ -71,11 +71,13 @@ function EditItem({className}) {
 			alertSubmit(image);
 			history.push("/admin/item");
 		} catch (error) {
-			const warn = error.response.data;
-			const textError = warn.map((error) => {
-				return error.message;
-			});
-			alertError(textError);
+			if (error.response.data) {
+				const warn = error.response.data;
+				const textError = warn.map((error) => {
+					return error.message;
+				});
+				alertError(textError);
+			} else console.log(error);
 		}
 	}
 
