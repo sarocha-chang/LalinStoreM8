@@ -119,6 +119,7 @@ export default styled(Category)`
 		transition: 0.5s;
 		position: relative;
 		box-shadow: 2px 2px #888888;
+		cursor: pointer;
 	}
 	.add:hover {
 		border: 1px solid black;

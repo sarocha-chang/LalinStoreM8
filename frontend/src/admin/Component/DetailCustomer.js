@@ -16,7 +16,7 @@ function DetailCustomer({className, data}) {
 	function delete_customer() {
 		return Swal.fire({
 			title: "โปรดยืนยัน",
-			text: "ต้องการลบประเภทสินค้านี้ออกจากคลังหรือไม่",
+			text: "ต้องการลบสมาชิกคนนี้ออกจากระบบหรือไม่",
 			icon: "warning",
 			showCancelButton: true,
 			cancelButtonText: "ไม่",
@@ -25,7 +25,7 @@ function DetailCustomer({className, data}) {
 			confirmButtonText: "ใช่",
 		}).then((result) => {
 			if (result.isConfirmed) {
-				Swal.fire("ลบสำเร็จ", "ลบประเภทสินค้าในคลังเรียบร้อยแล้ว", "success");
+				Swal.fire("ลบสำเร็จ", "ลบสมาชิกออกจากระบบเรียบร้อยแล้ว", "success");
 				axios.delete(`/admin/deleteCustomer/${id}`).then(() => {
 					dispatch(deleteCustomer({id: id}));
 				});

@@ -11,39 +11,39 @@ let bodyCare = require("./config/item/body.json");
 let faceCare = require("./config/item/face.json");
 let vitamin = require("./config/item/vitamin.json");
 
-// db.sequelize.sync({force: true}).then(async () => {
-// 	const admin = await db.type.create({name: "admin"});
-// 	const customer = await db.type.create({name: "customer"});
-// 	try {
-// 		cusAdmin = await db.customers.bulkCreate(cusAdmin, {validate: true});
-// 		await admin.addCustomers(cusAdmin);
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// 	try {
-// 		cusCustomer = await db.customers.bulkCreate(cusCustomer, {validate: true});
-// 		await customer.addCustomers(cusCustomer);
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// 	hairCare = await db.items.bulkCreate(hairCare, {validate: true});
-// 	const categoryHair = await db.category.create({name: "haircare"});
-// 	await categoryHair.addItems(hairCare);
+db.sequelize.sync({force: true}).then(async () => {
+	const admin = await db.type.create({name: "admin"});
+	const customer = await db.type.create({name: "customer"});
+	try {
+		cusAdmin = await db.customers.bulkCreate(cusAdmin, {validate: true});
+		await admin.addCustomers(cusAdmin);
+	} catch (error) {
+		console.log(error);
+	}
+	try {
+		cusCustomer = await db.customers.bulkCreate(cusCustomer, {validate: true});
+		await customer.addCustomers(cusCustomer);
+	} catch (error) {
+		console.log(error);
+	}
+	hairCare = await db.items.bulkCreate(hairCare, {validate: true});
+	const categoryHair = await db.category.create({name: "haircare"});
+	await categoryHair.addItems(hairCare);
 
-// 	bodyCare = await db.items.bulkCreate(bodyCare, {validate: true});
-// 	const categoryBody = await db.category.create({name: "bodycare"});
-// 	await categoryBody.addItems(bodyCare);
+	bodyCare = await db.items.bulkCreate(bodyCare, {validate: true});
+	const categoryBody = await db.category.create({name: "bodycare"});
+	await categoryBody.addItems(bodyCare);
 
-// 	faceCare = await db.items.bulkCreate(faceCare, {validate: true});
-// 	const categoryFace = await db.category.create({name: "facecare"});
-// 	await categoryFace.addItems(faceCare);
+	faceCare = await db.items.bulkCreate(faceCare, {validate: true});
+	const categoryFace = await db.category.create({name: "facecare"});
+	await categoryFace.addItems(faceCare);
 
-// 	vitamin = await db.items.bulkCreate(vitamin, {validate: true});
-// 	const categoryVitamin = await db.category.create({name: "vitamin"});
-// 	await categoryVitamin.addItems(vitamin);
-// });
+	vitamin = await db.items.bulkCreate(vitamin, {validate: true});
+	const categoryVitamin = await db.category.create({name: "vitamin"});
+	await categoryVitamin.addItems(vitamin);
+});
 
-db.sequelize.sync();
+// db.sequelize.sync();
 
 app.get("/", async (req, res) => {
 	res.status(200).send({
