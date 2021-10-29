@@ -7,23 +7,24 @@ import axios from "axios";
 import React, {useState} from "react";
 import "boxicons";
 
-import {deleteCategory} from "../../app/Category/actions";
+import {deleteCategory,editCategory} from "../../app/Category/actions";
 
 function DetailCate({className, data}) {
 	const [id] = React.useState(data.id);
 	const [name, setName] = React.useState(checkCategory(data.category_id));
 	const dispatch = useDispatch();
-	const [modalOpen, setModalOpen] = useState(false);
+	// const [modalOpen, setModalOpen] = useState(false);
+
 	function delete_category() {
 		return Swal.fire({
 			title: "โปรดยืนยัน",
 			text: "ต้องการลบประเภทสินค้านี้ออกจากคลังหรือไม่",
 			icon: "warning",
 			showCancelButton: true,
-			cancelButtonText: "ไม่",
+			cancelButtonText: "ยกเลิก",
 			confirmButtonColor: "#3085d6",
 			cancelButtonColor: "#d33",
-			confirmButtonText: "ใช่",
+			confirmButtonText: "ยืนยัน",
 		}).then((result) => {
 			if (result.isConfirmed) {
 				Swal.fire("ลบสำเร็จ", "ลบประเภทสินค้าในคลังเรียบร้อยแล้ว", "success");
@@ -33,60 +34,96 @@ function DetailCate({className, data}) {
 			}
 		});
 	}
-
+	function editCategory() {
+		Swal.fire({
+			title: "แก้ไขประเภทสินค้า",
+			text: "กรุณากรอกชื่อประเภทสินค้า",
+			input: "text",
+			inputAttributes: {
+				autocapitalize: "off",
+			},
+			showCancelButton: true,
+			confirmButtonText: "ยืนยัน",
+			cancelButtonText: "ยกเลิก",
+			showLoaderOnConfirm: true,
+			preConfirm: async function (input) {
+				return new Promise(function (resolve, reject) {
+					setTimeout(async function () {
+						if (input) {
+							resolve();
+							let name = input;
+							const data = {
+								name: name,
+							};
+							const cate = await axios.put(`/admin/updateCategory/${id}`, data);
+							console.log(data);
+							dispatch(editCategory(cate));
+						} else reject();
+					}, 1000);
+				});
+			},
+			allowOutsideClick: false,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: "แก้ไขประเภทสินค้าสำเร็จ",
+				});
+				window.location.reload();
+			}
+		});
+	}
 	function checkCategory(data) {
 		axios.get(`/admin/searchCategory/${data}`).then((data) => {
 			setName(data.data.cate);
 		});
 	}
-	function Modal({className, setOpenModal}) {
-		return (
-			<div className={className}>
-				<div className="modalBackground">
-					<div className="modalContainer">
-						<div className="titleCloseBtn">
-							<button
-								onClick={() => {
-									setOpenModal(false);
-								}}>
-								X
-							</button>
-						</div>
-						<div className="title">
-							<h1>Are You Sure You Want to Continue?</h1>
-						</div>
-						<div className="body">
-							<p>The next page looks amazing. Hope you want to go there!</p>
-						</div>
-						<div className="footer">
-							<button
-								onClick={() => {
-									setOpenModal(false);
-								}}
-								id="cancelBtn">
-								Cancel
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+	// function Modal({className, setOpenModal}) {
+	// 	return (
+	// 		<div className={className}>
+	// 			<div className="modalBackground">
+	// 				<div className="modalContainer">
+	// 					<div className="titleCloseBtn">
+	// 						<button
+	// 							onClick={() => {
+	// 								setOpenModal(false);
+	// 							}}>
+	// 							X
+	// 						</button>
+	// 					</div>
+	// 					<div className="title">
+	// 						<h1>Are You Sure You Want to Continue?</h1>
+	// 					</div>
+	// 					<div className="body">
+	// 						<p>The next page looks amazing. Hope you want to go there!</p>
+	// 					</div>
+	// 					<div className="footer">
+	// 						<button
+	// 							onClick={() => {
+	// 								setOpenModal(false);
+	// 							}}
+	// 							id="cancelBtn">
+	// 							Cancel
+	// 						</button>
+	// 					</div>
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	);
+	// }
 	return (
 		<tr className={className}>
 			<td>{data.id}</td>
-			{modalOpen && <Modal setOpenModal={setModalOpen} />}
+			{/* {modalOpen && <Modal setOpenModal={setModalOpen} />} */}
 
 			<td
-				onClick={() => {
-					setModalOpen(true);
-				}}>
+			// onClick={() => {
+			// 	setModalOpen(true);
+			// }}
+			>
 				{data.name}
 			</td>
 			<td>
-				<Link to={`/admin/edit-item/${data.id}`}>
-					<box-icon name="edit" />
-				</Link>
+				<box-icon name="edit" onClick={editCategory} />
 				<box-icon name="trash" type="solid" color="#f04e4e" onClick={delete_category} />
 			</td>
 		</tr>
@@ -116,7 +153,7 @@ export default styled(DetailCate)`
 	box-icon {
 		width: 50px;
 	}
-	.modalBackground {
+	/* .modalBackground {
 		background-color: white;
 		border: 1px solid black;
 		border-radius: 10px;
@@ -167,5 +204,5 @@ export default styled(DetailCate)`
 
 	#cancelBtn {
 		background-color: crimson;
-	}
+	} */
 `;

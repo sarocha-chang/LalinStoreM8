@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import {editCustomer} from "../../app/Customer/actions";
 import withReactContent from "sweetalert2-react-content";
 
-// import Error from "./Error";
+import Error from "./Error";
 
 function EditCustomer({className}) {
 	const {id} = useParams();
@@ -54,25 +54,27 @@ function EditCustomer({className}) {
 			alertSubmit();
 			history.push("/admin/customers");
 		} catch (error) {
-			const warn = error.response.data;
-			const textError = warn.map((error) => {
-				return error.message;
-			});
-			// alertError(textError);
+			if (error.response.data) {
+				const warn = error.response.data;
+				const textError = warn.map((error) => {
+					return error.message;
+				});
+				alertError(textError);
+			} else console.log(error);
 		}
 	}
 
-	// function alertError(textError) {
-	// 	const err = new Array(...textError);
-	// 	const swal = withReactContent(Swal);
-	// 	swal.fire({
-	// 		icon: "warning",
-	// 		title: "ERROR INPUT",
-	// 		width: 800,
-	// 		html: <Error err={err}></Error>,
-	// 		confirmButtonColor: "#005488",
-	// 	});
-	// }
+	function alertError(textError) {
+		const err = new Array(...textError);
+		const swal = withReactContent(Swal);
+		swal.fire({
+			icon: "warning",
+			title: "ERROR INPUT",
+			width: 800,
+			html: <Error err={err}></Error>,
+			confirmButtonColor: "#005488",
+		});
+	}
 	return (
 		<div className={className}>
 			<h1 className="top"> แก้ไขข้อมูลสมาชิก </h1>
@@ -173,7 +175,8 @@ function EditCustomer({className}) {
 				</div>
 				<div className="butt">
 					<button type="submit" className="submit" onClick={onSubmit}>
-					</button>
+						ยืนยัน
+						</button>
 					<Link to="/admin/customers">
 						<button type="cancel" className="cancel">
 							ยกเลิก

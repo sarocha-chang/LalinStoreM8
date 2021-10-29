@@ -16,12 +16,12 @@ function Sidebar({className}) {
 	return (
 		<>
 			<nav className={className}>
-				<Link to="/admin" className="brand">
+				<Link to="/admin/item" className="brand">
 					Lalin
 				</Link>
-				<Link to="/admin" className="menu">
+				{/* <Link to="/admin" className="menu">
 					<box-icon name="home" color="#544e3d"></box-icon> Home
-				</Link>
+				</Link> */}
 				<Link to="/admin/item" className="menu">
 					<box-icon name="folder" color="#544e3d"></box-icon>
 					Items

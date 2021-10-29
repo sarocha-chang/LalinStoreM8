@@ -7,7 +7,7 @@ import {Redirect, useHistory} from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {fetchCategory} from "../../app/Category/actions";
+import {addCategory, fetchCategory} from "../../app/Category/actions";
 import DetailCate from "./DetailCate";
 
 function Category({className}) {
@@ -48,7 +48,48 @@ function Category({className}) {
 	// }
 
 	function onClick() {
-		// history.push("/admin/add-item");
+		addCate();
+	}
+
+	function addCate() {
+		Swal.fire({
+			title: "เพิ่มประเภทสินค้า",
+			text: "กรุณากรอกประเภทสินค้า",
+			input: "text",
+			inputAttributes: {
+				autocapitalize: "off",
+			},
+			showCancelButton: true,
+			confirmButtonText: "ยืนยัน",
+			cancelButtonText: "ยกเลิก",
+			showLoaderOnConfirm: true,
+			preConfirm: async function (input) {
+				return new Promise(function (resolve, reject) {
+					setTimeout(async function () {
+						if (input) {
+							resolve();
+							let name = input;
+							const data = {
+								name: name,
+							};
+							const category = await axios.post(`/admin/addCategory/`, data);
+							console.log(data);
+							dispatch(addCategory(category));
+						} else {
+							reject();
+						}
+					}, 1000);
+				});
+			},
+			allowOutsideClick: false,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire({
+					title: "เพิ่มประเภทสินค้าสำเร็จ",
+				});
+				window.location.reload();
+			}
+		});
 	}
 
 	return (
