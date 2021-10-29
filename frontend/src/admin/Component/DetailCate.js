@@ -4,16 +4,15 @@ import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import Swal from "sweetalert2";
 import axios from "axios";
-import React, {useState} from "react";
+import React from "react";
 import "boxicons";
 
-import {deleteCategory,editCategory} from "../../app/Category/actions";
+import {deleteCategory, editCategory} from "../../app/Category/actions";
 
 function DetailCate({className, data}) {
 	const [id] = React.useState(data.id);
 	const [name, setName] = React.useState(checkCategory(data.category_id));
 	const dispatch = useDispatch();
-	// const [modalOpen, setModalOpen] = useState(false);
 
 	function delete_category() {
 		return Swal.fire({
@@ -77,50 +76,14 @@ function DetailCate({className, data}) {
 			setName(data.data.cate);
 		});
 	}
-	// function Modal({className, setOpenModal}) {
-	// 	return (
-	// 		<div className={className}>
-	// 			<div className="modalBackground">
-	// 				<div className="modalContainer">
-	// 					<div className="titleCloseBtn">
-	// 						<button
-	// 							onClick={() => {
-	// 								setOpenModal(false);
-	// 							}}>
-	// 							X
-	// 						</button>
-	// 					</div>
-	// 					<div className="title">
-	// 						<h1>Are You Sure You Want to Continue?</h1>
-	// 					</div>
-	// 					<div className="body">
-	// 						<p>The next page looks amazing. Hope you want to go there!</p>
-	// 					</div>
-	// 					<div className="footer">
-	// 						<button
-	// 							onClick={() => {
-	// 								setOpenModal(false);
-	// 							}}
-	// 							id="cancelBtn">
-	// 							Cancel
-	// 						</button>
-	// 					</div>
-	// 				</div>
-	// 			</div>
-	// 		</div>
-	// 	);
-	// }
 	return (
 		<tr className={className}>
 			<td>{data.id}</td>
-			{/* {modalOpen && <Modal setOpenModal={setModalOpen} />} */}
-
-			<td
-			// onClick={() => {
-			// 	setModalOpen(true);
-			// }}
-			>
-				{data.name}
+			<td>{data.name}</td>
+			<td>
+				<Link to={`/admin/category/show/${data.id}`} className="link">
+					กดเพื่อดูรายละเอียด
+				</Link>
 			</td>
 			<td>
 				<box-icon name="edit" onClick={editCategory} />
@@ -153,56 +116,12 @@ export default styled(DetailCate)`
 	box-icon {
 		width: 50px;
 	}
-	/* .modalBackground {
-		background-color: white;
-		border: 1px solid black;
-		border-radius: 10px;
-	}
-	.modalContainer {
-		width: 600px;
-		border-radius: 12px;
-		background-color: white;
-		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-		display: flex;
-		flex-direction: column;
-		padding: 25px;
-	}
-
-	.modalContainer .title {
-		display: inline-block;
-		text-align: center;
-		font-size: 10px;
-	}
-
-	.titleCloseBtn {
-		display: flex;
-		justify-content: flex-end;
-	}
-
-	.titleCloseBtn button {
-		background-color: transparent;
-		border: none;
-		font-size: 10px;
+	.link {
+		color: black;
+		text-decoration: none;
 		cursor: pointer;
 	}
-
-	.modalContainer .body {
-		font-size: 16px;
-		text-align: center;
+	.link:hover {
+		text-decoration: underline;
 	}
-
-	.modalContainer .footer button {
-		width: 100px;
-		height: 35px;
-		border: none;
-		background-color: cornflowerblue;
-		color: white;
-		border-radius: 8px;
-		font-size: 16px;
-		cursor: pointer;
-	}
-
-	#cancelBtn {
-		background-color: crimson;
-	} */
 `;

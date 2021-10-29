@@ -1,32 +1,40 @@
-import PropTypes from "prop-types";
+import PropTypes, {func} from "prop-types";
 import styled from "styled-components";
 import {useSelector, useDispatch} from "react-redux";
 import {useState, useEffect} from "react";
-import {Redirect, useHistory} from "react-router-dom";
-
+import {Redirect, useParams} from "react-router-dom";
 import axios from "axios";
-import Swal from "sweetalert2";
 
-import {addCategory, fetchCategory} from "../../app/Category/actions";
-import DetailCate from "./DetailCate";
+import {fetchItem} from "../../app/Item/actions";
+import DetailItemCate from "./DetailItemCate";
 
-function Category({className}) {
+function Items({className}) {
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
-	const history = useHistory();
-	const category = useSelector((state) => state.category);
+	const items = useSelector((state) => state.items);
 	const dispatch = useDispatch();
 	const [keyword, setKeyword] = useState("");
+	const {id} = useParams();
 
 	useEffect(() => {
 		async function get() {
-			await axios.get("/admin/showCategory").then((res) => {
-				let cate = res.data.categories;
-				dispatch(fetchCategory(cate));
+			await axios.get("/all/show").then((res) => {
+				dispatch(fetchItem(res.data.item));
 			});
 		}
 		get();
 	}, [dispatch]);
 
+	function useSearch(event) {
+		setKeyword(event.target.value);
+		axios
+			.get(`/all/search/${keyword}`)
+			.then((res) => {
+				dispatch(fetchItem(res.data.item));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
 	// if (!user) {
 	// 	Swal.fire({
 	// 		icon: "error",
@@ -35,93 +43,40 @@ function Category({className}) {
 	// 	return <Redirect to="/home" />;
 	// }
 
-	// function useSearch(event) {
-	// 	setKeyword(event.target.value);
-	// 	axios
-	// 		.get(`/all/search/${keyword}`)
-	// 		.then((res) => {
-	// 			dispatch(fetchCategory(res.data.item));
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
-
-	function onClick() {
-		addCate();
-	}
-
-	function addCate() {
-		Swal.fire({
-			title: "เพิ่มประเภทสินค้า",
-			text: "กรุณากรอกประเภทสินค้า",
-			input: "text",
-			inputAttributes: {
-				autocapitalize: "off",
-			},
-			showCancelButton: true,
-			confirmButtonText: "ยืนยัน",
-			cancelButtonText: "ยกเลิก",
-			showLoaderOnConfirm: true,
-			preConfirm: async function (input) {
-				return new Promise(function (resolve, reject) {
-					setTimeout(async function () {
-						if (input) {
-							resolve();
-							let name = input;
-							const data = {
-								name: name,
-							};
-							const category = await axios.post(`/admin/addCategory/`, data);
-							console.log(data);
-							dispatch(addCategory(category));
-						} else {
-							reject();
-						}
-					}, 1000);
-				});
-			},
-			allowOutsideClick: false,
-		}).then((result) => {
-			if (result.isConfirmed) {
-				Swal.fire({
-					title: "เพิ่มประเภทสินค้าสำเร็จ",
-				});
-				window.location.reload();
-			}
-		});
-	}
-
 	return (
 		<div className={className}>
-			<h1 className="top">ข้อมูลประเภทสินค้า</h1>
+			<h1 className="top">ข้อมูลสินค้าในประเภท</h1>
 			<form className="form-inline">
 				<input
 					type="text"
 					className="search"
-					placeholder="Search by category's name"
-					// onChange={useSearch}
+					placeholder="Search by item's name"
+					onChange={useSearch}
 					value={keyword}
 				/>
 			</form>
 			<div className="table">
-				<button className="add" onClick={onClick}>
-					เพิ่มประเภทสินค้า +
-				</button>
 				<table className="ShowItem">
 					<thead>
 						<tr>
 							<th>id</th>
-							<th>ชื่อประเภทสินค้า</th>
-							<th>สินค้าในประเภท</th>
-							<th></th>
+							<th>รูป</th>
+							<th>ชื่อสินค้า</th>
+							<th>จำนวน</th>
+							<th>คำอธิบาย</th>
+							<th>ประเภท</th>
+							<th>ราคา</th>
+							<th>สถานะ</th>
+							<th>คะแนน</th>
 						</tr>
 					</thead>
 					<tbody>
-						{category ? (
-							category.map((data) => {
-								return <DetailCate data={data} key={data.id} />;
-							})
+						{items ? (
+							items
+								.filter((item) => item.category_id == id)
+								.map((data) => {
+									return <DetailItemCate data={data} key={data.id} />;
+								})
 						) : (
 							<div>Loading products....</div>
 						)}
@@ -132,12 +87,12 @@ function Category({className}) {
 	);
 }
 
-Category.propTypes = {
+Items.propTypes = {
 	className: PropTypes.string.isRequired,
-	category: PropTypes.node,
+	items: PropTypes.node,
 };
 
-export default styled(Category)`
+export default styled(Items)`
 	margin-bottom: 50px;
 	width: 98%;
 	h1.top {
@@ -151,7 +106,7 @@ export default styled(Category)`
 	}
 
 	.add {
-		margin-left: 83%;
+		margin-left: 86%;
 		margin-bottom: 1rem;
 		padding: 7px;
 		border-radius: 5px;

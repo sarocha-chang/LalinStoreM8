@@ -9,6 +9,7 @@ import AddItem from "./Component/AddItem";
 import ShowCategory from "./Component/ShowCategory";
 import ShowCustomer from "./Component/ShowCustomer";
 import EditCustomer from "./Component/EditCustomer";
+import ShowItemInCate from "./Component/ShowItemInCate";
 export default function Admin() {
 	return (
 		<Switch>
@@ -22,6 +23,12 @@ export default function Admin() {
 				<Sidebar />
 				<Container>
 					<ShowCustomer />
+				</Container>
+			</Route>
+			<Route path="/admin/category/show/:id">
+				<Sidebar />
+				<Container>
+					<ShowItemInCate />
 				</Container>
 			</Route>
 			<Route path="/admin/category">

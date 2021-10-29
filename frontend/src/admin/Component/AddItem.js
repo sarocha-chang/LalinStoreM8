@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import {useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
-import {Link, useParams, useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import {addItem} from "../../app/Item/actions";
