@@ -26,13 +26,13 @@ function Items({className}) {
 		get();
 	}, [dispatch]);
 
-	// if (!user) {
-	// 	Swal.fire({
-	// 		icon: "error",
-	// 		title: "กรุณาล็อคอิน",
-	// 	});
-	// 	return <Redirect to="/home" />;
-	// }
+	if (!user) {
+		Swal.fire({
+			icon: "error",
+			title: "กรุณาล็อคอิน",
+		});
+		return <Redirect to="/login" />;
+	}
 
 	function useSearch(event) {
 		setKeyword(event.target.value);
@@ -149,6 +149,7 @@ export default styled(Items)`
 			padding-top: 20px;
 			padding-bottom: 30px;
 			border-bottom: 1px solid #e5e5e5;
+
 		}
 
 		td {
@@ -156,6 +157,7 @@ export default styled(Items)`
 			font-size: 18px;
 			text-align: center;
 			padding: 25px 10px 10px 10px;
+			
 		}
 	}
 	form.form-inline {

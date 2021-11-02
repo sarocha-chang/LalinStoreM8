@@ -57,7 +57,8 @@ export default function Admin() {
 			</Route>
 			<Route path="/admin">
 				<Sidebar />
-				<Container></Container>
+				<Container>
+				</Container>
 			</Route>
 		</Switch>
 	);

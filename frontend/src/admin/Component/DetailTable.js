@@ -1,4 +1,4 @@
-import PropTypes, {func} from "prop-types";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -83,6 +83,13 @@ export default styled(DetailTable)`
 	}
 	.imgItem {
 		width: 100px;
+		transition: 1s;
+	}
+	.imgItem:hover {
+		width: 125px;
+		box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+		transition: 1s;
 	}
 
 	box-icon {

@@ -4,7 +4,8 @@ import {fetchCategory, editCategory, deleteCategory, searchCategory, addCategory
 
 export default createReducer([], {
 	[fetchCategory]: (state, action) => {
-		return action.payload;
+		if (action.payload.error) return [];
+		else return action.payload;
 	},
 	[addCategory]: (state, action) => {
 		state.push(action.payload);

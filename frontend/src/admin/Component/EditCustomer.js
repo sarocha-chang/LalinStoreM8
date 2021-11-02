@@ -16,7 +16,6 @@ function EditCustomer({className}) {
 	const [firstname, setFirstName] = useState("");
 	const [lastname, setLastName] = useState("");
 	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
 	const [phone, setPhone] = useState("");
 	const [type, setType] = useState("");
@@ -26,11 +25,10 @@ function EditCustomer({className}) {
 	useEffect(() => {
 		axios.get(`/admin/showCustomerDetail/${id}`).then((res) => {
 			console.log(res.data);
-			let {firstname, lastname, username, password, email, phone, type_id} = res.data.customer;
+			let {firstname, lastname, username, email, phone, type_id} = res.data.customer;
 			setFirstName(firstname);
 			setLastName(lastname);
 			setUsername(username);
-			setPassword(password);
 			setEmail(email);
 			setPhone(phone);
 			setType(type_id);
@@ -43,7 +41,6 @@ function EditCustomer({className}) {
 			firstname: firstname,
 			lastname: lastname,
 			username: username,
-			password: password,
 			email: email,
 			phone: phone,
 			type_id: type,
@@ -123,20 +120,6 @@ function EditCustomer({className}) {
 				</div>
 				<div className="row">
 					<div className="col-10">
-						<label> รหัสผ่าน: </label>
-					</div>
-					<div className="col-90">
-						<input
-							type="text"
-							placeholder="กรุณากรอกรหัสผ่าน"
-							className="short"
-							onChange={(event) => setPassword(event.target.value)}
-							value={password}
-						/>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-10">
 						<label> อีเมลล์: </label>
 					</div>
 					<div className="col-90">
@@ -176,7 +159,7 @@ function EditCustomer({className}) {
 				<div className="butt">
 					<button type="submit" className="submit" onClick={onSubmit}>
 						ยืนยัน
-						</button>
+					</button>
 					<Link to="/admin/customers">
 						<button type="cancel" className="cancel">
 							ยกเลิก

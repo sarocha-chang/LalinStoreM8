@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import {useSelector, useDispatch} from "react-redux";
 import {useState, useEffect} from "react";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -12,40 +12,51 @@ import DetailCate from "./DetailCate";
 
 function Category({className}) {
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
-	const history = useHistory();
 	const category = useSelector((state) => state.category);
 	const dispatch = useDispatch();
 	const [keyword, setKeyword] = useState("");
 
 	useEffect(() => {
 		async function get() {
-			await axios.get("/admin/showCategory").then((res) => {
-				let cate = res.data.categories;
-				dispatch(fetchCategory(cate));
-			});
+			let cate = await axios.get("/admin/showCategory");
+			cate = cate.data.categories;
+			dispatch(fetchCategory(cate));
 		}
 		get();
 	}, [dispatch]);
 
-	// if (!user) {
-	// 	Swal.fire({
-	// 		icon: "error",
-	// 		title: "กรุณาล็อคอิน",
-	// 	});
-	// 	return <Redirect to="/home" />;
-	// }
+	useEffect(() => {
+		async function search() {
+			if (keyword.length > 0) {
+				await axios
+					.get(`/admin/searchCateName/${keyword}`)
+					.then((res) => {
+						let cate = res.data.cate;
+						dispatch(fetchCategory(cate));
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			} else {
+				async function get() {
+					let cate = await axios.get("/admin/showCategory");
+					cate = cate.data.categories;
+					dispatch(fetchCategory(cate));
+				}
+				get();
+			}
+		}
 
-	// function useSearch(event) {
-	// 	setKeyword(event.target.value);
-	// 	axios
-	// 		.get(`/all/search/${keyword}`)
-	// 		.then((res) => {
-	// 			dispatch(fetchCategory(res.data.item));
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
+		search();
+	}, [keyword]);
+
+	if (!user) {
+		Swal.fire({
+			icon: "error",
+			title: "กรุณาล็อคอิน",
+		});
+		return <Redirect to="/login" />;
+	}
 
 	function onClick() {
 		addCate();
@@ -73,7 +84,6 @@ function Category({className}) {
 								name: name,
 							};
 							const category = await axios.post(`/admin/addCategory/`, data);
-							console.log(data);
 							dispatch(addCategory(category));
 						} else {
 							reject();
@@ -99,8 +109,11 @@ function Category({className}) {
 				<input
 					type="text"
 					className="search"
+					id="input"
 					placeholder="Search by category's name"
-					// onChange={useSearch}
+					onChange={(key) => {
+						setKeyword(key.target.value);
+					}}
 					value={keyword}
 				/>
 			</form>

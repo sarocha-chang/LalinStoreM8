@@ -176,6 +176,30 @@ module.exports = {
 		next();
 	},
 
+	searchCateName: async (req, res, next) => {
+		try {
+			const {keyword} = req.params;
+			let cate = await category.findAll();
+			cate = cate.filter((cates) => {
+				return cates.dataValues.name.toLowerCase().includes(keyword.toLowerCase());
+			});
+			if (cate) {
+				res.status(200).json({
+					message: "หาประเภทสินค้าสำเร็จ",
+					cate,
+				});
+			} else {
+				res.status(404).json({
+					message: "ไม่พบประเภทสินค้้าในระบบ",
+					error: true,
+				});
+			}
+		} catch (error) {
+			next(error);
+		}
+		next();
+	},
+
 	deleteCategory: async (req, res, next) => {
 		try {
 			const categories = await category.findByPk(req.params.id);
@@ -364,5 +388,27 @@ module.exports = {
 		} catch (error) {
 			next(error);
 		}
+	},
+	searchCustomer: async (req, res, next) => {
+		try {
+			const {keyword} = req.params;
+			let customer = await customers.findAll();
+			customer = customer.filter((cus) => {
+				return cus.dataValues.firstname.toLowerCase().includes(keyword.toLowerCase());
+			});
+			if (customer) {
+				res.status(200).json({
+					message: "หาลูกค้าสำเร็จ",
+					customer,
+				});
+			} else {
+				res.status(404).json({
+					message: "ไม่พบลูกค้าในระบบ",
+				});
+			}
+		} catch (error) {
+			next(error);
+		}
+		next();
 	},
 };

@@ -2,17 +2,16 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import {useSelector, useDispatch} from "react-redux";
 import {useState, useEffect} from "react";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 import axios from "axios";
 import Swal from "sweetalert2";
 
-import {getCustomer, deleteCustomer} from "../../app/Customer/actions";
+import {getCustomer} from "../../app/Customer/actions";
 import DetailCustomer from "./DetailCustomer";
 
 function Customers({className}) {
 	const [user] = useState(JSON.parse(localStorage.getItem("token")));
-	const history = useHistory();
 	const customer = useSelector((state) => state.customers);
 	const dispatch = useDispatch();
 	const [keyword, setKeyword] = useState("");
@@ -27,28 +26,25 @@ function Customers({className}) {
 		get();
 	}, [dispatch]);
 
-	// if (!user) {
-	// 	Swal.fire({
-	// 		icon: "error",
-	// 		title: "กรุณาล็อคอิน",
-	// 	});
-	// 	return <Redirect to="/home" />;
-	// }
+	if (!user) {
+		Swal.fire({
+			icon: "error",
+			title: "กรุณาล็อคอิน",
+		});
+		return <Redirect to="/login" />;
+	}
 
-	// function useSearch(event) {
-	// 	setKeyword(event.target.value);
-	// 	axios
-	// 		.get(`/all/search/${keyword}`)
-	// 		.then((res) => {
-	// 			dispatch(getCustomer(res.data.item));
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
-
-	function onClick() {
-		history.push("/admin/add-item");
+	async function useSearch(event) {
+		setKeyword(event.target.value);
+		await axios
+			.get(`/admin/searchCustomer/${keyword}`)
+			.then((res) => {
+				console.log(res.data.customer);
+				dispatch(getCustomer(res.data.customer));
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}
 
 	return (
@@ -59,7 +55,7 @@ function Customers({className}) {
 					type="text"
 					className="search"
 					placeholder="Search by customer's name"
-					// onChange={useSearch}
+					onChange={useSearch}
 					value={keyword}
 				/>
 			</form>

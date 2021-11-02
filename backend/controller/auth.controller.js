@@ -60,7 +60,7 @@ module.exports = {
 			if (err) return next(err);
 			if (user) {
 				const token = jwt.sign(user, privateKey, {algorithm: "RS256", expiresIn: "6h"});
-				return res.json({message: "Login success..", token, type: user.type});
+				return res.json({message: "Login success..", token, type_id: user.type_id});
 			} else {
 				return res.status(422).json(info);
 			}

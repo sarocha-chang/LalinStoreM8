@@ -19,9 +19,10 @@ function Sidebar({className}) {
 				<Link to="/admin/item" className="brand">
 					Lalin
 				</Link>
-				{/* <Link to="/admin" className="menu">
-					<box-icon name="home" color="#544e3d"></box-icon> Home
-				</Link> */}
+				<Link to="/admin" className="menu">
+					<box-icon name="home" color="#544e3d"></box-icon>
+					Home
+				</Link>
 				<Link to="/admin/item" className="menu">
 					<box-icon name="folder" color="#544e3d"></box-icon>
 					Items
@@ -33,6 +34,11 @@ function Sidebar({className}) {
 				<Link to="/admin/customers" className="menu">
 					<box-icon name="group" color="#544e3d"></box-icon>
 					Customers
+				</Link>
+
+				<Link to="/login" className="menu" onClick={logOut}>
+					<box-icon name="log-out" color="#544e3d"></box-icon>
+					logout
 				</Link>
 			</nav>
 		</>

@@ -11,7 +11,7 @@ import {deleteCategory, editCategory} from "../../app/Category/actions";
 
 function DetailCate({className, data}) {
 	const [id] = React.useState(data.id);
-	const [name, setName] = React.useState(checkCategory(data.category_id));
+	const [name, setName] = React.useState(checkCategory(data.id));
 	const dispatch = useDispatch();
 
 	function delete_category() {

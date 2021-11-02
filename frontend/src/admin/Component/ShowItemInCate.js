@@ -1,9 +1,10 @@
-import PropTypes, {func} from "prop-types";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import {useSelector, useDispatch} from "react-redux";
 import {useState, useEffect} from "react";
 import {Redirect, useParams} from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 import {fetchItem} from "../../app/Item/actions";
 import DetailItemCate from "./DetailItemCate";
@@ -27,21 +28,23 @@ function Items({className}) {
 	function useSearch(event) {
 		setKeyword(event.target.value);
 		axios
-			.get(`/all/search/${keyword}`)
+			.get(`/admin/searchCateName/${keyword}`)
 			.then((res) => {
-				dispatch(fetchItem(res.data.item));
+				console.log(res.data);
+
+				// dispatch(fetchItem(res.data));
 			})
 			.catch((err) => {
 				console.log(err);
 			});
 	}
-	// if (!user) {
-	// 	Swal.fire({
-	// 		icon: "error",
-	// 		title: "กรุณาล็อคอิน",
-	// 	});
-	// 	return <Redirect to="/home" />;
-	// }
+	if (!user) {
+		Swal.fire({
+			icon: "error",
+			title: "กรุณาล็อคอิน",
+		});
+		return <Redirect to="/login" />;
+	}
 
 	return (
 		<div className={className}>
@@ -73,7 +76,7 @@ function Items({className}) {
 					<tbody>
 						{items ? (
 							items
-								.filter((item) => item.category_id == id)
+								.filter((item) => item.category_id ===  id)
 								.map((data) => {
 									return <DetailItemCate data={data} key={data.id} />;
 								})
