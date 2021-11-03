@@ -1,22 +1,38 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
+import Swal from "sweetalert2";
 
 import {removeCustomer} from "../../app/Customer/actions";
 function Sidebar({className}) {
 	const dispatch = useDispatch();
+	const history = useHistory();
 
 	function logOut() {
-		localStorage.removeItem("token");
-		localStorage.removeItem("username");
-		dispatch(removeCustomer());
+		Swal.fire({
+			title: "โปรดยืนยัน",
+			text: "ต้องการออกจากระบบหรือไม่",
+			icon: "warning",
+			showCancelButton: true,
+			cancelButtonText: "ไม่",
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "ใช่",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				localStorage.removeItem("token");
+				localStorage.removeItem("username");
+				dispatch(removeCustomer());
+				history.push("/");
+			}
+		});
 	}
 
 	return (
 		<>
 			<nav className={className}>
-				<Link to="/admin/item" className="brand">
+				<Link to="/admin" className="brand">
 					Lalin
 				</Link>
 				<Link to="/admin" className="menu">
@@ -36,10 +52,10 @@ function Sidebar({className}) {
 					Customers
 				</Link>
 
-				<Link to="/login" className="menu" onClick={logOut}>
+				<h2 className="menu" onClick={logOut}>
 					<box-icon name="log-out" color="#544e3d"></box-icon>
 					logout
-				</Link>
+				</h2>
 			</nav>
 		</>
 	);

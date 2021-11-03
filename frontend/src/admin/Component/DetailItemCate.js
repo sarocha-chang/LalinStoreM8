@@ -1,13 +1,10 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import axios from "axios";
 import React from "react";
 import "boxicons";
 
 function DetailItemCate({className, data}) {
-	const [id] = React.useState(data.id);
 	const [name, setName] = React.useState(checkCategory(data.category_id));
 
 	function checkCategory(data) {

@@ -1,4 +1,4 @@
-import PropTypes, {func} from "prop-types";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -7,7 +7,7 @@ import axios from "axios";
 import React from "react";
 import "boxicons";
 
-import {deleteCategory, editCategory} from "../../app/Category/actions";
+import {deleteCategory} from "../../app/Category/actions";
 
 function DetailCate({className, data}) {
 	const [id] = React.useState(data.id);
@@ -79,7 +79,7 @@ function DetailCate({className, data}) {
 	return (
 		<tr className={className}>
 			<td>{data.id}</td>
-			<td>{data.name}</td>
+			<td>{name}</td>
 			<td>
 				<Link to={`/admin/category/show/${data.id}`} className="link">
 					กดเพื่อดูรายละเอียด

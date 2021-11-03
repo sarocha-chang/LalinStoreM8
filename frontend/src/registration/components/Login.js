@@ -5,21 +5,13 @@ import {Link, useHistory} from "react-router-dom";
 import {useState} from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {useDispatch} from "react-redux";
 import jwt from "jsonwebtoken";
-
-import {setCustomer, getCustomer} from "../../app/Customer/actions";
 
 function Login({className}) {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const history = useHistory();
-	const dispatch = useDispatch();
-
-	React.useEffect(() => {
-		dispatch(getCustomer());
-	}, [dispatch]);
 
 	async function onSubmit(event) {
 		event.preventDefault();
@@ -32,11 +24,9 @@ function Login({className}) {
 			localStorage.setItem(`username`, jwt.decode(response.data.token).username);
 			if (response.data.type_id === 1) {
 				localStorage.setItem(`token`, JSON.stringify(response.data.token));
-				dispatch(setCustomer(response.data.token));
-				history.push("/admin/item");
+				history.push("/admin");
 			} else {
 				localStorage.setItem(`token`, JSON.stringify(response.data.token));
-				dispatch(setCustomer(response.data.token));
 				history.push("/home");
 			}
 		} catch (error) {
@@ -78,10 +68,10 @@ function Login({className}) {
 								/>
 							</div>
 							<div className="link">
-								<Link to="/register" className="regis">
+								<Link to="" className="regis">
 									ยังไม่มีบัญชีผู้ใช้ ?
 								</Link>
-								<Link to="/register" className="forget">
+								<Link to="" className="forget">
 									ลืมรหัสผ่าน ?
 								</Link>
 							</div>
@@ -90,7 +80,7 @@ function Login({className}) {
 									เข้าสู่ระบบ
 								</button>
 
-								<Link to="/home">
+								<Link to="">
 									<button type="submit" className="Back">
 										กลับหน้าหลัก
 									</button>

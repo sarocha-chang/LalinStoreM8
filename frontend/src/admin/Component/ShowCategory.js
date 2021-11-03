@@ -46,9 +46,8 @@ function Category({className}) {
 				get();
 			}
 		}
-
 		search();
-	}, [keyword]);
+	}, [dispatch, keyword]);
 
 	if (!user) {
 		Swal.fire({

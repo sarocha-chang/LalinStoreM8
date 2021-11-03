@@ -26,25 +26,37 @@ function Customers({className}) {
 		get();
 	}, [dispatch]);
 
+	useEffect(() => {
+		async function search() {
+			if (keyword.length > 0) {
+				await axios
+					.get(`/admin/searchCustomer/${keyword}`)
+					.then((res) => {
+						let cus = res.data.customer;
+						dispatch(getCustomer(cus));
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			} else {
+				async function get() {
+					await axios.get("/admin/showCustomer").then((res) => {
+						let cus = res.data.customer;
+						dispatch(getCustomer(cus));
+					});
+				}
+				get();
+			}
+		}
+		search();
+	}, [dispatch, keyword]);
+
 	if (!user) {
 		Swal.fire({
 			icon: "error",
 			title: "กรุณาล็อคอิน",
 		});
 		return <Redirect to="/login" />;
-	}
-
-	async function useSearch(event) {
-		setKeyword(event.target.value);
-		await axios
-			.get(`/admin/searchCustomer/${keyword}`)
-			.then((res) => {
-				console.log(res.data.customer);
-				dispatch(getCustomer(res.data.customer));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
 	}
 
 	return (
@@ -55,7 +67,9 @@ function Customers({className}) {
 					type="text"
 					className="search"
 					placeholder="Search by customer's name"
-					onChange={useSearch}
+					onChange={(key) => {
+						setKeyword(key.target.value);
+					}}
 					value={keyword}
 				/>
 			</form>

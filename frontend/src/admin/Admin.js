@@ -10,6 +10,7 @@ import ShowCategory from "./Component/ShowCategory";
 import ShowCustomer from "./Component/ShowCustomer";
 import EditCustomer from "./Component/EditCustomer";
 import ShowItemInCate from "./Component/ShowItemInCate";
+import HomeAdmin from "./Component/HomeAdmin";
 export default function Admin() {
 	return (
 		<Switch>
@@ -58,6 +59,7 @@ export default function Admin() {
 			<Route path="/admin">
 				<Sidebar />
 				<Container>
+					<HomeAdmin />
 				</Container>
 			</Route>
 		</Switch>

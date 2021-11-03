@@ -3,7 +3,6 @@ import "boxicons";
 import GlobalStyle from "./GlobalStyle";
 import Admin from "./admin/Admin";
 import Registration from "./registration/Registration";
-import User from "./user/User";
 
 function App() {
 	return (
@@ -14,10 +13,6 @@ function App() {
 					<Admin />
 				</Route>
 				<Route path="/" exact>
-					<User />
-				</Route>
-
-				<Route path="">
 					<Registration />
 				</Route>
 			</Switch>

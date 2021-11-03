@@ -1,7 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 
-import {getCustomer, removeCustomer, editCustomer, deleteCustomer ,setCustomer
-} from "./actions";
+import {getCustomer, removeCustomer, editCustomer, deleteCustomer, setCustomer} from "./actions";
 
 export default createReducer([], {
 	[getCustomer]: (state, action) => {
@@ -17,7 +16,7 @@ export default createReducer([], {
 		state[cusIndex] = action.payload;
 	},
 	[removeCustomer]: (state, action) => {
-		return (state = {});
+		return (state = []);
 	},
 	[setCustomer]: (state, action) => {
 		return action.payload;

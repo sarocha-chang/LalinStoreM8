@@ -13,7 +13,7 @@ export default function Registration() {
 				</Container>
 			</Route>
 
-			<Route path="/login">
+			<Route path="/">
 				<Login />
 			</Route>
 		</Switch>
